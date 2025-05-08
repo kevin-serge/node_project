@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Commande</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f2f2f2;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .form-container {
+      background-color: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      width: 350px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"],
+    input[type="number"] {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #007bff;
+      border: none;
+      border-radius: 6px;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    #reponse {
+      margin-top: 15px;
+      text-align: center;
+      font-weight: bold;
+      color: green;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h1>Formulaire de commande</h1>
+    <form id="commandeForm">
+      <input type="text" name="nom" placeholder="Nom" required>
+      <input type="text" name="produit" placeholder="Produit" required>
+      <input type="number" name="quantite" placeholder="Quantité" required>
+      <button type="submit">Envoyer</button>
+    </form>
+
+    <p id="reponse"></p>
+  </div>
+
+  <script>
+    document.getElementById('commandeForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const nom = this.nom.value;
+      const produit = this.produit.value;
+      const quantite = parseInt(this.quantite.value);
+
+      try {
+        const reponse = await fetch('http://localhost:3000/commande', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ nom, produit, quantite })
+        });
+
+        const texte = await reponse.text();
+        document.getElementById('reponse').innerText = texte;
+      } catch (err) {
+        document.getElementById('reponse').innerText = "❌ Erreur de connexion au serveur.";
+        document.getElementById('reponse').style.color = "red";
+        console.error(err);
+      }
+    });
+  </script>
+</body>
+</html>

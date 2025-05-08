@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Accueil - Boutique</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f7f7f7;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #007bff;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .container {
+      padding: 40px;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    .produits {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
+
+    .produit {
+      background-color: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      width: 220px;
+      text-align: center;
+    }
+
+    .produit img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    .produit h3 {
+      margin-top: 10px;
+      font-size: 18px;
+    }
+
+    .produit p {
+      font-size: 14px;
+      color: #555;
+    }
+
+    .btn {
+      display: block;
+      margin: 40px auto 0;
+      padding: 12px 24px;
+      background-color: #28a745;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      font-size: 16px;
+      text-align: center;
+    }
+
+    .btn:hover {
+      background-color: #218838;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Bienvenue dans notre boutique</h1>
+  </header>
+
+  <div class="container">
+    <h2>Nos produits</h2>
+    <div class="produits">
+      <div class="produit">
+        <img src="https://via.placeholder.com/220x150.png?text=Produit+1" alt="Produit 1">
+        <h3>Savon Naturel</h3>
+        <p>Un savon bio fabriqué artisanalement.</p>
+      </div>
+      <div class="produit">
+        <img src="https://via.placeholder.com/220x150.png?text=Produit+2" alt="Produit 2">
+        <h3>Huile essentielle</h3>
+        <p>Pure et relaxante, pour le bien-être quotidien.</p>
+      </div>
+      <div class="produit">
+        <img src="https://via.placeholder.com/220x150.png?text=Produit+3" alt="Produit 3">
+        <h3>Crème visage</h3>
+        <p>Hydrate et illumine naturellement la peau.</p>
+      </div>
+    </div>
+
+    <a href="http://localhost:3000/index.html" class="btn">Faire une commande</a>
+  </div>
+
+</body>
+</html>

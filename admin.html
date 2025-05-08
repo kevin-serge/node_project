@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin - Commandes</title>
+  <style>
+    table {
+      border-collapse: collapse;
+      width: 90%;
+      margin: 20px auto;
+    }
+    th, td {
+      padding: 8px 12px;
+      border: 1px solid #ccc;
+      text-align: left;
+    }
+    th {
+      background-color: #f4f4f4;
+    }
+    button {
+      padding: 5px 10px;
+      margin: 2px;
+      cursor: pointer;
+    }
+    form {
+      margin: 20px auto;
+      width: 90%;
+      text-align: center;
+    }
+    input {
+      padding: 6px;
+      margin: 0 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1 style="text-align:center;">Tableau des commandes</h1>
+
+  <form id="formCommande">
+    <input type="hidden" id="commandeId">
+    <input type="text" id="nom" placeholder="Nom" required>
+    <input type="text" id="produit" placeholder="Produit" required>
+    <input type="number" id="quantite" placeholder="Quantité" required>
+    <button type="submit">Enregistrer</button>
+  </form>
+
+  <table id="tableCommandes">
+    <thead>
+      <tr>
+        <th>Nom</th>
+        <th>Produit</th>
+        <th>Quantité</th>
+        <th>Date</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    async function chargerCommandes() {
+      const res = await fetch('/admin/commandes');
+      const commandes = await res.json();
+      const tbody = document.querySelector('#tableCommandes tbody');
+      tbody.innerHTML = ''; // Reset table
+
+      commandes.forEach(cmd => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${cmd.nom}</td>
+          <td>${cmd.produit}</td>
+          <td>${cmd.quantite}</td>
+          <td>${new Date(cmd.date).toLocaleString()}</td>
+          <td>
+            <button onclick="remplirFormulaire('${cmd._id}', '${cmd.nom}', '${cmd.produit}', ${cmd.quantite})">✏️</button>
+            <button onclick="supprimerCommande('${cmd._id}')">🗑️</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function remplirFormulaire(id, nom, produit, quantite) {
+      document.getElementById('commandeId').value = id;
+      document.getElementById('nom').value = nom;
+      document.getElementById('produit').value = produit;
+      document.getElementById('quantite').value = quantite;
+    }
+
+    async function supprimerCommande(id) {
+      if (confirm("Supprimer cette commande ?")) {
+        await fetch(`/admin/commandes/${id}`, { method: 'DELETE' });
+        chargerCommandes();
+      }
+    }
+
+    document.getElementById('formCommande').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const id = document.getElementById('commandeId').value;
+      const nom = document.getElementById('nom').value;
+      const produit = document.getElementById('produit').value;
+      const quantite = document.getElementById('quantite').value;
+
+      const body = JSON.stringify({ nom, produit, quantite });
+
+      if (id) {
+        // Update
+        await fetch(`/admin/commandes/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body
+        });
+      } else {
+        // Create
+        await fetch('/commande', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body
+        });
+      }
+
+      // Reset form
+      document.getElementById('formCommande').reset();
+      document.getElementById('commandeId').value = '';
+
+      chargerCommandes();
+    });
+
+    chargerCommandes();
+  </script>
+</body>
+</html>
